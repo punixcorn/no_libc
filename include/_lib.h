@@ -1,6 +1,7 @@
 #ifndef __LIB_H
 #define __LIB_H
 
+#include "../include/_string.h"
 /* DEFINE NULL */
 #include "_int.h"
 #define null ((void*)0)
@@ -9,12 +10,18 @@
 #define _free(ptr) \
     ptr = null
 
-#define _assert(condition)\
-    if(!(condition)){\
-        _print("Assertion failed at line: ");\
-        _print("__LINE__\n"); \
-        _exit(-1);\
-    }
+typedef uint8_t  _bool;
+
+#ifdef bool
+#undef bool
+#define bool _bool;
+#define false 0
+#define true 1
+#else
+#define bool _bool;
+#define false 0
+#define true 1
+#endif
 
 void _exit(int errcode);
 
@@ -23,10 +30,25 @@ void _exit(int errcode);
 void _free(void * ptr);
 #endif
 
+
+char * _itoa(int number);
+// _assert depends on itoa
+#define _assert(condition)\
+    if(condition){\
+        _print("Assertion failed!\n"); \
+        _print("IN : ");\
+        _print(__FILE__);\
+        _print(" LINE : "); \
+        _print(_itoa(__LINE__));\
+        _print("\n");\
+        _exit(-1);\
+    }
+
 void * _malloc(size_t size);
 void * _memset(void * s, int c, size_t n);
 void * brk();
 void * sbrk();
+void * _mmap(size_t size);
 #endif
 
 

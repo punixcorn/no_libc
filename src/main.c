@@ -3,6 +3,6 @@
 #include "../include/_string.h"
 
 void _start(void){
-    _assert(__LINE__ < 0);
+    _assert(1 != 2);
     _exit(0);
 }

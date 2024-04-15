@@ -60,3 +60,19 @@ void _scan(char * buf, const unsigned int size){
     buf++;
     *buf = '\0';
 }
+
+void _printf(const char * fmt,...){
+    for( unsigned int i = 0; i < _strlen(fmt), i++; ){
+        
+        switch(fmt[i]){
+            case 'd':
+                  break;
+            default: 
+                  break;
+        }
+    }
+}
+
+void _scanf(const char * fmt,...){
+
+}
