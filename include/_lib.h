@@ -2,6 +2,7 @@
 #define __LIB_H
 
 #include "../include/_string.h"
+
 /* DEFINE NULL */
 #include "_int.h"
 #define null ((void*)0)
@@ -31,16 +32,56 @@ void _free(void * ptr);
 #endif
 
 
-char * _itoa(int number);
-// _assert depends on itoa
+/*
+ * ASSERTS 
+ * ASSERTS ARE MACROS HERE AND NOT FUNCTIONS 
+ * DUNNO HOW THE STANDARD LIB DOES IT
+ * ASSERTS ARE DEFINED UNDER _EXIT() & _ITOA()
+ * BECAUSE ASSERT DEPENDS ON ITOA & EXIT
+ */
 #define _assert(condition)\
     if(!(condition)){\
         _print("Assertion failed!\n"); \
         _print("IN : ");\
         _print(__FILE__);\
-        _print(" LINE : "); \
+        _print(" : ");\
+        _print(__func__);\
+        _print("()\n");\
+        _print("LINE : "); \
         _print(_itoa(__LINE__));\
         _print("\n");\
+        _exit(-1);\
+    }
+
+#define _throw_assert(message)\
+        _print("Assertion Called!\n"); \
+        _print("IN : ");\
+        _print(__FILE__);\
+        _print(" : ");\
+        _print(__func__);\
+        _print("()\n");\
+        _print("LINE : "); \
+        _print(_itoa(__LINE__));\
+        _print("\n");\
+        _print("MESSAGE: ");\
+        _print(message); \
+        _print("\n"); \
+        _exit(-1);\
+
+#define _assert_info(condition,message)\
+    if(!(condition)){\
+        _print("Assertion failed!\n"); \
+        _print("IN : ");\
+        _print(__FILE__);\
+        _print(" : ");\
+        _print(__func__);\
+        _print("()\n");\
+        _print("LINE : "); \
+        _print(_itoa(__LINE__));\
+        _print("\n");\
+        _print("MESSAGE: ");\
+        _print(message); \
+        _print("\n"); \
         _exit(-1);\
     }
 

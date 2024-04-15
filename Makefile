@@ -1,3 +1,8 @@
-main:
-	gcc -w -nostdlib -ggdb src/*
 
+main_w: src/*
+	gcc -nostdlib -ggdb src/* -o main
+main: src/*
+	gcc -w -nostdlib -ggdb src/* -o main
+run:
+	@./main
+	@echo ===========================================

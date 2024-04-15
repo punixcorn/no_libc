@@ -5,5 +5,6 @@
 
 size_t _strlen(const char * buf);
 int _reverse(char  * str, size_t length);
+char * _itoa(int number);
 
 #endif
