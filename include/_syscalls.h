@@ -5,5 +5,5 @@
 #define SYSOPEN 2
 #define SYSCLOSE 3
 #define SYSMMAP 9
-#define SYSEXIT 60 
+#define SYSEXIT 60
 #endif
