@@ -1,6 +1,7 @@
 #include "../include/_lib.h"
 #include "../include/_syscalls.h"
 
+
 void _exit(int errcode){
     __asm__ inline(
             "movl %0 ,%%edi;"
@@ -11,6 +12,17 @@ void _exit(int errcode){
             );
 }
 
+
+/* 
+ * THIS IS USED TO CALL THE MAIN() FUNCTION FROM MAIN.C
+ * PASSED INTO _START() 
+ * RETURN VALUE FROM MAIN() WILL BE PASSED INTO SYSEXIT()
+ */
+#include "../include/main.h"
+void _start(){
+    int main_return = main();
+    _exit(main_return);
+}
 
 // will use brk / sbrk later
 void * brk();

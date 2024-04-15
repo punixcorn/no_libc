@@ -34,7 +34,7 @@ void _free(void * ptr);
 char * _itoa(int number);
 // _assert depends on itoa
 #define _assert(condition)\
-    if(condition){\
+    if(!(condition)){\
         _print("Assertion failed!\n"); \
         _print("IN : ");\
         _print(__FILE__);\

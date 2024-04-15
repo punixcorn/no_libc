@@ -62,15 +62,43 @@ void _scan(char * buf, const unsigned int size){
 }
 
 void _printf(const char * fmt,...){
-    for( unsigned int i = 0; i < _strlen(fmt), i++; ){
-        
-        switch(fmt[i]){
-            case 'd':
-                  break;
-            default: 
-                  break;
+    unsigned int len  = _strlen(fmt);
+   char * temp = (char *)_malloc(len);
+    unsigned int i = 0;
+    for( ; i < len; i++ ){
+        if( fmt[i] == '%' ){
+            i++;
+            switch(fmt[i]){
+                case 'd':
+                    _println("%d found");
+                      break;
+                case 'c':
+                    _println("%c found");
+                      break;
+                case 's':
+                    _println("%s found");
+                      break;
+                case 'l':
+                    _println("%l found");
+                      break;
+                default: 
+                     _println("invalid arg after %");
+                      break;
+                  
+            }
+        }else if ( fmt[i] != '\0' ){
+            temp[i] = fmt[i];
+        }else if(fmt[i] == '\0'){
+             break;
         }
     }
+    if ( temp[i] != '\0' ){
+        temp[++i] = '\0';
+    }
+    _assert(temp != null);
+    _print(temp);
+    _free(temp);
+    _free(fmt);
 }
 
 void _scanf(const char * fmt,...){
