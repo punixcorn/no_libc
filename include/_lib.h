@@ -1,6 +1,5 @@
 #ifndef __LIB_H
 #define __LIB_H
-
 #include "../include/_string.h"
 
 /* DEFINE NULL */
@@ -11,20 +10,19 @@
 #define _free(ptr) ptr = null
 
 typedef uint8_t _bool;
-
 #ifdef bool
 #undef bool
 #define bool _bool;
 #define false 0
 #define true 1
 #else
-#define bool _bool;
+#define bool _bool
 #define false 0
 #define true 1
 #endif
 
 /* calls SYSEXIT syscall with exitcode as exit code */
-void _exit(int exitcode);
+[[noreturn]] void _exit(int exitcode);
 
 /* Place holder for Assert macros */
 #include "_assert.h"
@@ -35,7 +33,7 @@ void _free(void* ptr);
 #endif
 
 /* allocates memory of size (size) */
-void* _malloc(size_t size);
+[[nodiscard("returns pointer to heap memory")]] void* _malloc(size_t size);
 
 /* not implemented */
 void* brk();

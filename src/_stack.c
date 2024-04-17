@@ -8,5 +8,5 @@
 
 #ifndef __STACK_CHK_FAIL__
 #define __STACK_CHK_FAIL__
-__stack_chk_fail(void){};
+int __stack_chk_fail(void) { return 0; };
 #endif
