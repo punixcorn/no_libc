@@ -1,5 +1,7 @@
 #include "../include/_string.h"
 
+#include <string.h>
+
 #include "../include/_int.h"
 #include "../include/_lib.h"
 
@@ -121,13 +123,12 @@ void *_memset(void *s, int c, size_t n) {
     return s;
 }
 
-void *_memcpy(void *dst, const void *src, unsigned long n) {
-    if (dst == null) {
-        dst = _malloc(n + 1);
+void _memcpy(void *dest, const void *src, unsigned long n) {
+    if (dest == null) {
+        dest = _malloc(n + 1);
     }
-    char *d = dst;
-    const char *s = src;
 
-    while (n--) *d++ = *s++;
-    return dst;
+    for (int i = 0; i < n; i++) {
+        dest[i] = (typeof(src))&src[i];
+    }
 }

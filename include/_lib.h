@@ -23,69 +23,26 @@ typedef uint8_t _bool;
 #define true 1
 #endif
 
-void _exit(int errcode);
+/* calls SYSEXIT syscall with exitcode as exit code */
+void _exit(int exitcode);
+
+/* Place holder for Assert macros */
+#include "_assert.h"
 
 /*This is the dev version*/
 #ifdef __DEV_
 void _free(void* ptr);
 #endif
 
-/*
- * ASSERTS
- * ASSERTS ARE MACROS HERE AND NOT FUNCTIONS
- * DUNNO HOW THE STANDARD LIB DOES IT
- * ASSERTS ARE DEFINED UNDER _EXIT() & _ITOA()
- * BECAUSE ASSERT DEPENDS ON ITOA & EXIT
- */
-#define _assert(condition)             \
-    if (!(condition)) {                \
-        _print("Assertion failed!\n"); \
-        _print("IN : ");               \
-        _print(__FILE__);              \
-        _print(" : ");                 \
-        _print(__func__);              \
-        _print("()\n");                \
-        _print("LINE : ");             \
-        _print(_itoa(__LINE__));       \
-        _print("\n");                  \
-        _exit(-1);                     \
-    }
-
-#define _throw_assert(message)     \
-    _print("Assertion Called!\n"); \
-    _print("IN : ");               \
-    _print(__FILE__);              \
-    _print(" : ");                 \
-    _print(__func__);              \
-    _print("()\n");                \
-    _print("LINE : ");             \
-    _print(_itoa(__LINE__));       \
-    _print("\n");                  \
-    _print("MESSAGE: ");           \
-    _print(message);               \
-    _print("\n");                  \
-    _exit(-1);
-
-#define _assert_info(condition, message) \
-    if (!(condition)) {                  \
-        _print("Assertion failed!\n");   \
-        _print("IN : ");                 \
-        _print(__FILE__);                \
-        _print(" : ");                   \
-        _print(__func__);                \
-        _print("()\n");                  \
-        _print("LINE : ");               \
-        _print(_itoa(__LINE__));         \
-        _print("\n");                    \
-        _print("MESSAGE: ");             \
-        _print(message);                 \
-        _print("\n");                    \
-        _exit(-1);                       \
-    }
-
+/* allocates memory of size (size) */
 void* _malloc(size_t size);
-void* _memset(void* s, int c, size_t n);
+
+/* not implemented */
 void* brk();
+/* not implemented */
 void* sbrk();
+
+/* not implemented */
 void* _mmap(size_t size);
+
 #endif
