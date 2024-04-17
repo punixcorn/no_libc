@@ -1,7 +1,6 @@
 #include "../include/_lib.h"
 
 #include "../include/_syscalls.h"
-
 void _exit(int exitcode) {
     __asm__ inline(
         "movl %0 ,%%edi;"
@@ -27,7 +26,7 @@ void* brk();
 void* sbrk();
 
 // malloc using mmap
-void* _malloc(size_t size) {
+[[nodiscard("returns pointer to heap memory")]] void* _malloc(size_t size) {
     void* ptr = null;
     __asm__ inline(
         "mov $0, %%r9;"     // offset

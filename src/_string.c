@@ -1,11 +1,12 @@
 #include "../include/_string.h"
 
 #include "../include/_int.h"
+#include "../include/_io.h"
 #include "../include/_lib.h"
 
 size_t _strlen(const char *buf) {
     if (buf == null) {
-        _exit(2);
+        _exit(-1);
     }
 
     size_t count = 0;
@@ -113,7 +114,7 @@ int _stoi(const char *str) {
     return base * sign;
 }
 
-void *_memset(void *s, int c, size_t n) {
+void *_memset(void *__restrict__ s, int c, size_t n) {
     for (int i = 0; i < n; i++) {
         *(int *)s = c;
         s += (sizeof(int));
@@ -121,13 +122,26 @@ void *_memset(void *s, int c, size_t n) {
     return s;
 }
 
-void *_memcpy(void *dst, const void *src, unsigned long n) {
-    if (dst == null) {
-        dst = _malloc(n + 1);
-    }
+void *_memcpy(void *__restrict__ dst, const void *__restrict__ src,
+              unsigned long n) {
+    if (dst == null) dst = _malloc(n + 1);
+
     char *d = dst;
     const char *s = src;
 
     while (n--) *d++ = *s++;
     return dst;
+}
+
+int _memcmp(const void *__restrict__ s1, const void *__restrict__ s2,
+            size_t n) {
+    _assert(s1 != null && s2 != null);
+    const char *a = s1;
+    const char *b = s2;
+
+    while (n--) {
+        if (a[n] != b[n]) return 0;
+    }
+
+    return 1;
 }

@@ -1,18 +1,18 @@
 #include "../include/main.h"
 
-#include "../include/_arg.h"
-#include "../include/_assert.h"
+#include "../include/_file.h"
 #include "../include/_io.h"
-#include "../include/_lib.h"
-#include "../include/_string.h"
 
 int main() {
-    int age = 0;
-    char c;
-    char *name = _malloc(10);
-    _assert(name != null);
-    _printf("enter your name and age and a char:\n");
-    _scanf("%s %d", &name, &age, &c);
-    _printf("enter name is %s and age : %d%c\n", name, age, c);
+    /* this does not raise warnings with number of arguments */
+    _printf("%s %s", "helli;");
+    char* s;
+    /*  but this does raise warnings with number of arguments */
+    _snprintf(s, 10, "%s %s", "hello");
+
+    /*
+     * i don't know why?
+     * i have given attribute __printf__(...)
+     */
     return 0;
 }
