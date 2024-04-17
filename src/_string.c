@@ -82,3 +82,52 @@ char *_itoa(int number) {
 
     return intstr;
 }
+
+int _stoi(const char *str) {
+    if (str == null) return 0;
+
+    int sign = 1, base = 0, i = 0;
+
+    // find the first non whitespace , if whitespaces then ignore.
+    while (str[i] == ' ') {
+        i++;
+    }
+
+    // sign of number
+    if (str[i] == '-' || str[i] == '+') {
+        sign = 1 - 2 * (str[i++] == '-');
+    }
+
+    // checking for valid input
+    while (str[i] >= '0' && str[i] <= '9') {
+        // handling overflow test case
+        if (base > INT32_MAX / 10 ||
+            (base == INT32_MAX / 10 && str[i] - '0' > 7)) {
+            if (sign == 1)
+                return INT32_MAX;
+            else
+                return INT32_MIN;
+        }
+        base = 10 * base + (str[i++] - '0');
+    }
+    return base * sign;
+}
+
+void *_memset(void *s, int c, size_t n) {
+    for (int i = 0; i < n; i++) {
+        *(int *)s = c;
+        s += (sizeof(int));
+    }
+    return s;
+}
+
+void *_memcpy(void *dst, const void *src, unsigned long n) {
+    if (dst == null) {
+        dst = _malloc(n + 1);
+    }
+    char *d = dst;
+    const char *s = src;
+
+    while (n--) *d++ = *s++;
+    return dst;
+}

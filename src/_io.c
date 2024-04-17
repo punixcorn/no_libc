@@ -1,6 +1,7 @@
 #include "../include/_io.h"
 
 #include "../include/_arg.h"
+#include "../include/_assert.h"
 #include "../include/_lib.h"
 #include "../include/_string.h"
 
@@ -26,7 +27,7 @@ void _print(const char *str) {
 
 void _printn(const char *str, size_t n) {
     CHECKNULL(str);
-    _assert_info(n <= _strlen(str), "<size_t>  n  > <size_t> strlen");
+    _static_assert(n <= _strlen(str), "<size_t>  n  > <size_t> strlen");
     _write(STDOUT_FILENO, str, n);
 }
 
@@ -66,32 +67,28 @@ void _printf(const char *fmt, ...) {
     _va_list ap;
     _va_start(ap, fmt);
 
-    unsigned int len = _strlen(fmt);
-    unsigned int i = 0;
+    size_t len = _strlen(fmt);
+    size_t i = 0;
 
     for (; i < len; i++) {
         if (fmt[i] == '%') {
             i++;
             switch (fmt[i]) {
                 case 'd':
-                    //_println("%d found");
                     _print(_itoa(_va_arg(ap, int)));
                     break;
-                case 'c':
-                    //_println("%c found");
-                    char temp = (char)_va_arg(ap, int);
+                case 'c': {
+                    char temp = (char)(_va_arg(ap, int));
                     _printn(&temp, 1);
                     break;
+                }
                 case 's':
-                    //_println("%s found");
                     _print(_va_arg(ap, char *));
                     break;
                 case 'l':
-                    //_println("%l found");
                     _print(_itoa(_va_arg(ap, long)));
                     break;
                 default:
-                    // _println("invalid arg after %");
                     _printn(&fmt[i], 1);
                     break;
             }
@@ -105,4 +102,70 @@ void _printf(const char *fmt, ...) {
     _free(fmt);
 }
 
-void _scanf(const char *fmt, ...) {}
+char *__readword(char *buf) {
+    if (buf[0] != '\0') {
+        buf = "";
+    }
+    _read(STDIN_FILENO, buf, 1);
+
+    while (buf) {
+        if (*buf == '\n' || *buf == ' ' || *buf == '\0') {
+            *buf = '\0';
+            break;
+        }
+        buf++;
+        _read(STDIN_FILENO, buf, 1);
+    }
+    return buf;
+}
+
+void _scanf(const char *fmt, ...) {
+    CHECKNULL(fmt);
+    size_t len = _strlen(fmt);
+
+    _va_list ap;
+    _va_start(ap, fmt);
+
+    char *input = (char *)_malloc(100);
+    CHECKNULL(input);
+
+    // read the whole line
+    //_scanline(input);
+
+    size_t i = 0;
+    while (i < len) {
+        if (fmt[i] == '%') {
+            i++;
+            switch (fmt[i]) {
+                case 'd': {
+                    __readword(input);
+                    *(_va_arg(ap, int *)) = _stoi(input);
+                    _memset(input, '\0', _strlen(input));
+                    break;
+                }
+                case 's': {
+                    __readword(input);
+                    _memcpy(*(_va_arg(ap, char **)), input, sizeof(input));
+                    _memset(input, '\0', _strlen(input));
+                    break;
+                }
+                case 'c': {
+                    char c;
+                    _read(STDIN_FILENO, &c, 1);
+                    *(_va_arg(ap, char *)) = c;
+                    break;
+                }
+                default:
+                    _throw_assert("Invaild argument after %");
+                    break;
+            }
+        }
+        i++;
+    }
+    _va_end(ap);
+    _free(input);
+}
+
+int _sprintf(char *s, char *fmt, ...);
+
+char *_format(char *fmt, ...);

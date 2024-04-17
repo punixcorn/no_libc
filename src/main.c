@@ -1,22 +1,18 @@
 #include "../include/main.h"
 
 #include "../include/_arg.h"
+#include "../include/_assert.h"
 #include "../include/_io.h"
 #include "../include/_lib.h"
 #include "../include/_string.h"
 
-/*
- * Everything written so far just to make a silly bootleg printf(...)
- */
-
 int main() {
-    int days = 2;
-    const char* name = "potato";
-    _printf(
-        "My name is %s and  i have been writing the code for %d days \n"
-        "The reason why every function has an _ is to shut the compiler and "
-        "linker up\n"
-        "Enjoy this very slow, useless implementation of libc\n",
-        name, days);
+    int age = 0;
+    char c;
+    char *name = _malloc(10);
+    _assert(name != null);
+    _printf("enter your name and age and a char:\n");
+    _scanf("%s %d", &name, &age, &c);
+    _printf("enter name is %s and age : %d%c\n", name, age, c);
     return 0;
 }

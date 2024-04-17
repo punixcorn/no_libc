@@ -2,12 +2,12 @@
 
 #include "../include/_syscalls.h"
 
-void _exit(int errcode) {
+void _exit(int exitcode) {
     __asm__ inline(
         "movl %0 ,%%edi;"
         "xorl %%eax, %%eax;"
         "movl %1, %%eax;"
-        "syscall" ::"r"(errcode),
+        "syscall" ::"r"(exitcode),
         "r"(SYSEXIT));
 }
 
@@ -69,11 +69,3 @@ void _free(void* ptr) {
 }
 
 #endif
-
-void* _memset(void* s, int c, size_t n) {
-    for (int i = 0; i < n; i++) {
-        *(int*)s = c;
-        s += (sizeof(int));
-    }
-    return s;
-}

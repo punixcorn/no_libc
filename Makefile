@@ -1,4 +1,3 @@
-
 main_w: src/*
 	gcc -nostdlib -ggdb src/* -o main
 main: src/*
@@ -6,3 +5,5 @@ main: src/*
 run:
 	@./main
 	@echo ===========================================
+clean:
+	rm main 
