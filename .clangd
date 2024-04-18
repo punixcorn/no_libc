@@ -1,2 +1,2 @@
 CompileFlags:
-  Add: [ -std=gnu11 ]
+  Add: [ -std=c11 ]

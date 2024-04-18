@@ -1,8 +1,8 @@
-#include "../include/_string.h"
+#include "../_string.h"
 
-#include "../include/_int.h"
-#include "../include/_io.h"
-#include "../include/_lib.h"
+#include "../_int.h"
+#include "../_io.h"
+#include "../_lib.h"
 
 size_t _strlen(const char *buf) {
     if (buf == null) {

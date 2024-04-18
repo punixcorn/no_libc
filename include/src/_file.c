@@ -1,8 +1,6 @@
-#include "../include/_file.h"
+#include "../_file.h"
 
-#include <sys/cdefs.h>
-
-#include "../include/_syscalls.h"
+#include "../_syscalls.h"
 
 int _open(const char *pathname, int flags) {
     int fd = 0;
@@ -34,7 +32,9 @@ __attribute__((nonnull)) int _creat(const char *pathname, mode_t mode) {
 }
 
 int _openat(int dirfd, const char *pathname, int flags, ...
-            /* mode_t mode */);
+            /* mode_t mode */) {
+    return -1;
+};
 
 int _close(int fd) {
     int ret = 0;
