@@ -1,12 +1,11 @@
-#include "../include/_io.h"
+#include "../_io.h"
 
-#include "../include/_arg.h"
-#include "../include/_assert.h"
-#include "../include/_lib.h"
-#include "../include/_string.h"
+#include "../_arg.h"
+#include "../_assert.h"
+#include "../_lib.h"
+#include "../_string.h"
 
 /* an IO err will exit with -1 */
-
 #define CHECKNULL(buf)                                \
     if (buf == null) {                                \
         _throw_assert(" buffer is null<((void *)0)>") \
@@ -223,10 +222,7 @@ int _sprintf(char *__restrict __s, char *__restrict __fmt, ...) {
     _va_end(ap);
     _free(__fmt);
 
-    if (__s == null) {
-        return -1;
-    }
-
+    if (__s == null) return -1;
     return 0;
 };
 
@@ -299,17 +295,89 @@ char *_format(char *__restrict __fmt, ...) {
     return (s - count);
 };
 
+#define _sprintf_macro(fmt, ...) _sprintf(fmt, __VA_ARGS__)
 // under development
+//
 int _snprintf(char *__restrict __s, size_t __maxlen,
-              const char *__restrict __format, ...){};
+              const char *__restrict __format, ...) {
+    _va_list ap;
+    _va_start(ap, __format);
+    size_t len = _strlen(__format);
+    _assert(len > _strlen(__s));
+    _assert(len < __maxlen);
+    size_t i = 0;
+    while (i < len) {
+        if (__format[i] == '%') {
+            i++;
+            switch (__format[i]) {
+                case 'l':
+                case 'd': {
+                    i++;  // thi__s  will removed the letter after the %
+                    char *intstr = _itoa(_va_arg(ap, int));
+                    while (*intstr != '\0') {
+                        *__s = *intstr;
+                        intstr++;
+                        __s++;
+                    }
+                } break;
+                case 'c': {
+                    i++;  // thi__s  will removed the letter after the %
+                    char temp = (char)(_va_arg(ap, int));
+                    *__s = temp;
+                    __s++;
+                    break;
+                }
+                case 's': {
+                    i++;  // thi__s  will removed the letter after the %
+                    char *strtemp = _va_arg(ap, char *);
+                    while (*strtemp != '\0') {
+                        *__s = *strtemp;
+                        strtemp++;
+                        __s++;
+                    }
+                    break;
+                }
+                default: {
+                    *__s = __format[i];
+                    __s++;
+                    i++;
+                } break;
+            }
+        } else if (__format[i] != '\0') {
+            *__s = __format[i];
+            i++;
+            __s++;
+        } else if (__format[i] == '\0') {
+            *__s = '\0';
+            break;
+        }
+    }
+    _va_end(ap);
+    _free(__format);
+
+    if (__s == null) return -1;
+    return 0;
+};
+
 /* write character to stdout */
-int _fputc(int __c, FILE *__stream){};
-int _putc(int __c, FILE *__stream){};
-int _putchar(int __c){};
+int _fputc(int __c, FILE *__stream) { return -1; };
+int _putc(int __c, FILE *__stream) { return -1; };
+
+int _putchar(int __c) {
+    char __a = (char)__c;
+    _assert(((__a > 126) || (__a < 0)));
+    _write(STDOUT_FILENO, &__a, 1);
+};
 
 /* Read a character from stdin. */
-int _fgetc(FILE *__stream){};
-int _getc(FILE *__stream){};
-int _getchar(void){};
+int _fgetc(FILE *__stream) { return -1; };
+int _getc(FILE *__stream) { return -1; };
+
+int _getchar(void) {
+    char a;
+    _read(STDIN_FILENO, &a, 1);
+    return (int)a;
+};
+
 int _sscanf(const char *__restrict __s, const char *__restrict __format, ...){};
 int _fscanf(FILE *__restrict __stream, const char *__restrict __format, ...){};

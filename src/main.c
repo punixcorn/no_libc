@@ -3,16 +3,20 @@
 #include "../include/_file.h"
 #include "../include/_io.h"
 
-int main() {
-    /* this does not raise warnings with number of arguments */
-    _printf("%s %s", "helli;");
-    char* s;
-    /*  but this does raise warnings with number of arguments */
-    _snprintf(s, 10, "%s %s", "hello");
+int main(void) {
+    int fd = _open("./main.txt", O_WRONLY | O_CREAT);
+    if (fd < 0) {
+        _print(_format("file %s is %d\n", "main.txt", fd));
+    } else {
+        _print("file opened\n");
+    }
+    _write(fd, "this is main\0", 11);
+    int closed = _close(fd);
+    if (closed < 0) {
+        _print(_format("file failed to close  is %d", closed));
 
-    /*
-     * i don't know why?
-     * i have given attribute __printf__(...)
-     */
+    } else {
+        _print("file closed\n");
+    }
     return 0;
 }

@@ -1,6 +1,6 @@
-#include "../include/_lib.h"
+#include "../_lib.h"
 
-#include "../include/_syscalls.h"
+#include "../_syscalls.h"
 void _exit(int exitcode) {
     __asm__ inline(
         "movl %0 ,%%edi;"
@@ -15,7 +15,7 @@ void _exit(int exitcode) {
  * PASSED INTO _START()
  * RETURN VALUE FROM MAIN() WILL BE PASSED INTO SYSEXIT()
  */
-#include "../include/main.h"
+#include "../main.h"
 void _start() {
     int main_return = main();
     _exit(main_return);
