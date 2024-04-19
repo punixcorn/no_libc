@@ -8,28 +8,38 @@ shared: lib src/main.c
 	@./scripts/check_lib.sh
 	gcc $(FLAGS) -w lib/*  src/main.c -o bin/main
 
-# uses nothing
-main: include/**/*
+static: static_lib/* src/main.c
+	make static_lib 
 	@./scripts/check_bin.sh
-	gcc $(FLAGS) -nostdlib src/* -o bin/main 
+	gcc -static -w -nostdlib src/main.c static_lib/no_libc.a -o bin/main
 
-run:
-	@echo ===========================================
-	@./bin/main $(args)
+# uses .c files
+main: include/**/* src/main.c
+	@./scripts/check_bin.sh
+	gcc $(FLAGS) -nostdlib include/src/* src/* -o bin/main 
 
 # runs every check
 make_check:
-	@./scripts/check_bin.sh
-	@echo "Runing checks"
-	@echo "[@] compiling rawfiles"
-	gcc $(FLAGS) src/main.c include/**/* -nostdlib -w -o bin/main 
-	@echo "===== DONE ====="
-	@echo "[@]compiling shared files"
-	[[ -d bin ]] || mkdir bin
-	@./scripts/check_lib.sh
-	gcc $(FLAGS) -w lib/*  src/main.c -o bin/main
-	@echo "===== DONE ====="
+	make shared 
+	@echo "=============================================="
+	make main 
+	@echo "=============================================="
+	make static_lib_
+
+# creates a static lib
+static_lib_:
+	cd static_lib && make all 
+	
+run:
+	@echo "=============================================="
+	@./bin/main $(args)
+	@echo "=============================================="
+	make clean
 
 clean:
-	rm bin/*  2>/dev/null
-	rm lib/* 2>/dev/null
+	@echo "Cleaning..."
+	@touch a.txt 
+	@rm *.txt 2>/dev/null
+	@rm bin/*  2>/dev/null
+	@rm lib/* 2>/dev/null
+	@echo "Done"
