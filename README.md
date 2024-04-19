@@ -13,7 +13,22 @@ edit `src/main`
 
 ```sh
     make
+    make run
 ```
+### To test all 
+
+```sh
+    make make_check
+```
+
+### Targets
+
+- `make_check` = run all ( for testing )
+- `static` = creats a static lib in `static_lib` and links to `src/main.c`
+- `static_lib_` = creates static lib `no_libc.a` in `static_lib/`
+- `shared` = creates shared objects in `lib/` ( it is the default )
+- `main` = uses raw c files in `include/src/` 
+
 ---
 
 ## Note
@@ -22,11 +37,14 @@ edit `src/main`
 ---
 
 # DIR
+
 - `src/` = source files 
 - `include/` = header files & source files for the header files
 - `include/src/` = source files for the header files
 - `iib/` = compiled shared object files
 - `scripts/` = scripts to compile shared files and check shared files
+- `static_lib/` = contains `no_libc.a` for static linking
+- `bin` = binary is placed
 
 ---
 
