@@ -1,5 +1,6 @@
 docs/
 a.out
+/bin/main
 .gdb_history
 peda-session-main.txt
 */**/*.h.gch

@@ -10,6 +10,7 @@ typedef signed short int16_t;
 typedef unsigned short uint16_t;
 typedef unsigned int size_t;
 typedef unsigned int uint_t;
+typedef long off_t;
 
 /* Types for `void *' pointers.  */
 #if __WORDSIZE == 64
@@ -88,5 +89,4 @@ __extension__ typedef unsigned long long int uintmax_t;
 
 /* Maximum for largest unsigned integral type.  */
 #define UINTMAX_MAX (__UINT64_C(18446744073709551615))
-
 #endif

@@ -6,19 +6,21 @@ this is not intended for any use
 
 purely written out of fun
 
---- 
+---
 
-# Compile 
-edit `src/main` 
+# Compile
+
+edit `src/main`
 
 ```sh
-    make
-    make run
+make
+make run
 ```
-### To test all 
+
+### To test all
 
 ```sh
-    make make_check
+make make_check
 ```
 
 ### Targets
@@ -27,18 +29,19 @@ edit `src/main`
 - `static` = creats a static lib in `static_lib` and links to `src/main.c`
 - `static_lib_` = creates static lib `no_libc.a` in `static_lib/`
 - `shared` = creates shared objects in `lib/` ( it is the default )
-- `main` = uses raw c files in `include/src/` 
+- `main` = uses raw c files in `include/src/`
 
 ---
 
 ## Note
-- compiles to so files which are then used 
+
+- compiles to so files which are then used
 
 ---
 
 # DIR
 
-- `src/` = source files 
+- `src/` = source files
 - `include/` = header files & source files for the header files
 - `include/src/` = source files for the header files
 - `iib/` = compiled shared object files
@@ -50,22 +53,22 @@ edit `src/main`
 
 ### Available Functions
 
--  _read     
--  _write    
--  _print    
--  _println  
--  _scanline 
--  _scan     
--  _printf   
--  _scanf    
--  _exit   
--  _malloc 
--  _memset 
--  _brk    
--  sbrk    
-- _strlen  
+- _read
+- _write
+- _print
+- _println
+- _scanline
+- _scan
+- _printf
+- _scanf
+- _exit
+- _malloc
+- _memset
+- _brk
+- sbrk
+- _strlen
 - _reverse
-- _itoa 
+- _itoa
 - _stoa
 - _memcpy
 - _memcmp
@@ -74,4 +77,6 @@ edit `src/main`
 - _snprintf
 - _open
 - _creat
-- _close 
+- _close
+- _mmap
+- _munmap

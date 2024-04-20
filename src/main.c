@@ -1,22 +1,22 @@
 #include "../include/main.h"
 
-#include "../include/_file.h"
 #include "../include/_io.h"
-
-int main(void) {
-    int fd = _open("./main.txt", O_WRONLY | O_CREAT);
-    if (fd < 0) {
-        _print(_format("file %s is %d\n", "main.txt", fd));
-    } else {
-        _print("file opened\n");
+#include "../include/_lib.h"
+int main() {
+    int* foo2 = (int*)_mmap(null, 32, PROT_READ | PROT_WRITE,
+                            MAP_SHARED | MAP_ANONYMOUS, 0, 0);
+    if (((void*)foo2 == MAP_FAILED)) {
+        _print("map failed");
     }
-    _write(fd, "this is main\0", 11);
-    int closed = _close(fd);
-    if (closed < 0) {
-        _print(_format("file failed to close  is %d", closed));
+    foo2[1] = 1;
+    _printf("foo[1]  = %d\n", foo2[1]);
+    int a = _munmap(foo2, 32);
+    if (foo2 == null) {
+        _print("foo2 is null\n");
+    }
 
-    } else {
-        _print("file closed\n");
+    if (a < 0) {
+        _print("munmap failed\n");
     }
     return 0;
 }

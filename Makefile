@@ -6,12 +6,13 @@ args=
 shared: lib src/main.c
 	@./scripts/check_bin.sh
 	@./scripts/check_lib.sh
-	gcc $(FLAGS) -w lib/*  src/main.c -o bin/main
+	gcc $(FLAGS) -nostdlib lib/* include/src/_lib.c src/main.c -o bin/main  
+	@# adding _lib.c because undefined refernce to _start();
 
 static: static_lib/* src/main.c
 	make static_lib 
 	@./scripts/check_bin.sh
-	gcc -static -w -nostdlib src/main.c static_lib/no_libc.a -o bin/main
+	gcc -static -w -nostdlib $(FLAGS) src/main.c static_lib/no_libc.a -o bin/main 
 
 # uses .c files
 main: include/**/* src/main.c
@@ -20,11 +21,8 @@ main: include/**/* src/main.c
 
 # runs every check
 make_check:
-	make shared 
 	@echo "=============================================="
 	make main 
-	@echo "=============================================="
-	make static_lib_
 
 # creates a static lib
 static_lib_:
@@ -38,8 +36,7 @@ run:
 
 clean:
 	@echo "Cleaning..."
-	@touch a.txt 
-	@rm *.txt 2>/dev/null
+	@touch bin/t lib/a
 	@rm bin/*  2>/dev/null
 	@rm lib/* 2>/dev/null
 	@echo "Done"

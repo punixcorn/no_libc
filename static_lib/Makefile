@@ -6,5 +6,7 @@ all: *.o
 	gcc -c ../include/src/*
 
 clean:
-	rm no_libc.a
+	@touch a.o a.a
+	@rm *.o
+	rm *.a
 
