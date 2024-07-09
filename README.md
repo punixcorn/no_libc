@@ -1,53 +1,67 @@
-# nolibc
+<h1 align="center">
+    nolibc
+</h1>
 
-My poor attempt of rewritting a small portion of libc without libc but syscalls
+> [!WARNING]
+> Still a work in progress
 
-this is not intended for any use
 
-purely written out of fun
+My poor attempt of re-writting a small portion of libc without libc but syscalls </br>
+This is not intended for any use. </br>
+Purely written out of fun and for demo purposes. </br>
 
 ---
 
 # Compile
 
-edit `src/main`
+### Edit `src/main.c`
+
+### Install dependencies 
 
 ```sh
-make
-make run
+sudo pacman -S make gcc     # Archlinux
+sudo apt install make gcc   # Debian based 
+sudo dnf install make gcc   # Red Hat based
+```
+### Compile 
+
+```sh
+make        # compiles binary
+make run    # run's binary
 ```
 
-### To test all
+### Run tests 
 
 ```sh
 make make_check
 ```
 
-### Targets
+### Targets in Makefile
 
-- `make_check` = run all ( for testing )
-- `static` = creats a static lib in `static_lib` and links to `src/main.c`
-- `static_lib_` = creates static lib `no_libc.a` in `static_lib/`
-- `shared` = creates shared objects in `lib/` ( it is the default )
-- `main` = uses raw c files in `include/src/`
+- `make_check` = compile lib in all formats (**.so**,**.a**,**.c**) for testing 
+- `static` = creats a static lib in `static_lib/` dir and links to `src/main.c` 
+- `static_lib_` = creates static lib `no_libc.a` in `static_lib/` dir
+- `shared` = creates shared objects (**.so**) in `lib/` ( it is the default target )
+- `main` = uses raw c files in `include/src/` and links them to `src/main.c`
 
 ---
 
 ## Note
 
-- compiles to so files which are then used
+- The default **make** compiles the header files to `.so` files in `lib/` which are then used to link `src/main.c`
+- compiled binary is located in `bin/`
 
 ---
 
-# DIR
+# DIRECTORIES
 
-- `src/` = source files
-- `include/` = header files & source files for the header files
+- `src/` = source file(s), that's where `main.c` is located
+- `include/` = header files & source files dir, all used for the header files
 - `include/src/` = source files for the header files
-- `iib/` = compiled shared object files
-- `scripts/` = scripts to compile shared files and check shared files
+- `iib/` = compiled shared object files ( `.so` files )
+- `scripts/` = scripts to compile shared files and check shared files ( used in makefile )
 - `static_lib/` = contains `no_libc.a` for static linking
-- `bin` = binary is placed
+- `bin` = ouput binary is placed
 
 ---
 
