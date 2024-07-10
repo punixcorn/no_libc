@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0"/>
+        <title>no libc</title>
+        <meta name="description" content="A mini implementation of libc using syscalls"/>
+        <link rel="glibc" href="https://sourceware.org/glibc/"/>
+        <style>
+            body {margin: 5% auto; background: #f2f2f2; color: #444444; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.8; text-shadow: 0 1px 0 #ffffff; max-width: 73%;}
+            code {background: white;}
+            a {border-bottom: 1px solid #444444; color: #444444; text-decoration: none;}
+            a:hover {border-bottom: 0;}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>no_libc, a libc from scratch*</h1>
+            <aside> a small version of libc from start using syscalls (on linux) </aside>
+        </header>
+        <!-- PURPOSE -->
+        <h2><strong>Purpose</strong></h2>
+        <p> Just entriely out of fun and for learning, after all how many times you get to wake up and say to yourself,</br> <em>"I am going to rewite the C standard library"</em></p>
+
+        <p>Writing this was a little fun challange for me, and also an excuse to use assembly ( not AT&T )
+            </br>
+            I am going to try my best to demonstrate  what i did so you can get started on your own, or understand what's going on
+        </p>
+         what you need to get started is a bit of understanding in 
+        <ul>
+            <li>The C programming Language</li>
+            <li>Assembly ( <em> any flavour </em> ) </li>
+            <li>How C <em>Linking</em> is done</li>
+        </ul>
+
+        <p>not to much stuff, just a bit</p>
+
+
+        <!-- FUNCTION -->
+        <h2>PART I : Assembly</h2>
+        <p>The purpose of this Writing isn't a follow through tutorial but to showcase my process.
+        </br>
+        This isnt a tutorial if you want one there are probably many online.
+        </br>
+        I was going to write a bit of tutorial basic Assembly, but found a stunning one by
+        this kind random internet stranger : </br>
+        <a href="https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html">Assembly tutorial</a>.<h6> Check it out before continuing any further </h6>
+        </p>
+        <!--
+        <h2> <strong> PART I : </strong> c? </h2>
+        <h3> [*] no main()? </h3>
+        if you have ever done C you know the entry to the program is your main function 
+        which could look like either one of these :
+        <blockquote>
+        <code>int main(){}</code> </br>
+        <code>int main(void){}</code> </br>
+        <code>int main(int argc,char ** argv){}</code> </br>
+        <code>int main(int argc,char ** argv,char ** envp){}</code> </br>
+        </blockquote>
+
+        why? not to go into details, the C/C++ linker looks for <em>main()</em> function to link,assmeble,then compile. </br>
+        But we don't have libc on our side... </br>
+        So... what do we do?. We create a raw elf file directly from assembly, assmeble, link, then compile. </br>
+        That's basically what you are going to be doing, the job of libc  </br>
+
+        <h3> [*] Assembly! </h3>
+        <p>If you haven't done assembly before don't worry it's easy </br></p>
+        <p>here's a quick reference</p>
+        <blockquote>
+        <code>mov a,b</code>  : <strong>mov</strong>e b to a </br>
+        <code>add a,b</code>  : <strong>add</strong> b to a </br>
+        ....</br>
+        </blockquote>
+        <p> see its not that difficult, you can check the other opcodes(keywords) out but we won't be using them either ways </p>
+    
+
+        <h3> [*] App in Assembly! </h3>
+        <p>Now that you know assembly lets write an application in one </br></p>
+        <p>In section 4.4 <em>"Hello World!" in Linux Assembly</em> </br>
+        we see our actual first program that compiles and runs normally,
+        but don't care about all of it, just the end ( the last 3 lines , in a red box if you did catch what i mean't )
+        </p>
+        <blockquote style="background-color: #f2f2f2;color: black;">
+        section .text </br>
+            global _start </br>
+
+        _start:</br>
+            <div style="border: 1px solid red; padding-left: 4px;">
+            mov eax,1            ; The system call for exit (sys_exit)</br>
+            mov ebx,0            ; Exit with return code of 0 (no error)</br>
+            int 80h</br>
+            </div>
+        </blockquote>
+    -->
+       <h3>PART II : SYSCALLS, SYS_EXIT </h3> 
+       <p>
+        we start off <strong>main.c</strong> in our root directory with a <code> void _start(){} </code></br>
+        you can compile it by using: 
+       </p>
+       <codeblock style="display: flex; justify-content: center; align-self: center;">
+            <code style="padding: 0px 5px 0px 5px;"> gcc -nostdlib main.c -o main  </code> </br>
+       </codeblock>
+       <p>
+       this uses gcc to compile but without the standard library aka libc </br>
+       after compiling and running we get this : 
+       </p>
+       <codeblock style="display: flex; justify-content: center; align-self: center;">
+       <code> [1]    153003 segmentation fault (core dumped)  ./main </code>
+       </codeblock>
+       <p> A <em> segfault </em>. Why? because the program didn't know where to stop. To tell it where we stop there's a syscall in linux called exit </br>
+        take a look here to see all of syscalls :
+       <a href="https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md">chromium syscall docs</a>
+        </p>
+        <p>
+            in the <em> exit syscall </em> it takes 2 arguments,
+            <ul>
+                <li> <strong>0x3c</strong> in <em>rax</em></li>
+                <li><strong>error_code</strong> in <em>rdi</em></li>
+            </ul>
+        </p>
+
+        <p>
+        We write it up using inline assmebly in c. Incase you have no knowlegde about inline assembly in c,
+        here's another kind stranger's work on inline assembly :
+        <a href="https://gcc.gnu.org/onlinedocs/gcc/extensions-to-the-c-language-family/how-to-use-inline-assembly-language-in-c-code.html">Inline Assembly</a>
+        </p>
+
+       </p>
+
+        <blockquote style="background-color: #f2f2f2;color: black;">
+        #define SYSEXIT  60 </br>
+        void _start() { </br>
+         &emsp;  __asm__ inline(</br>
+           &emsp;      "movl $0 ,%%edi;"</br>
+           &emsp;       "xorl %%eax, %%eax;"</br>
+           &emsp;       "movl%1, %%eax;"</br>
+           &emsp;       "syscall" ::</br>
+           &emsp;       "r"(SYSEXIT));</br>
+        }
+        </blockquote>
+
+        <p>
+            this will make our code exit normally, you can see from here that we placed <strong>0</strong> into <em>edi(rsi)</em> and
+            moved <strong> SYSEXIT(60)</strong> into <em>eax(rax)</em> and then we called syscall to carry out the function
+            
+        </p>
+
+        <p>
+            This is how basic syscall is written, grab the arguments and parse it and pass it in the respective resgisters
+            then call <em><strong>syscall</strong></em>
+        </p>
+
+        <p>
+            you can make this more clean by extracting it to it's own function, and in another file then call it when needed </br>
+            That's how my directory structure basically is
+        </p>
+
+        <summary>
+        <h2> Summary </h2>
+        <p>This is how I went about writing libc with syscalls, you implement all the syscalls you need ( eg read, write )
+            then write higher functions ( eg printf ) with them.
+            I hope this non technical guide was of help to you.
+            Again this wasn't a tutorial, I gave you the resources i used and they are structured and way better than i could ever do it. </br>
+            Cheers.
+        </p>
+        <blockquote>
+            "Imagine all the people..."<br>
+            - <em>John Lennon, Yoko's husband</em>
+        </blockquote>
+        <hr>
+        </summary>
+
+        <h2>Epilogue</h2>
+        <p>Inspired by the geniuses behind Links posted above : <a href="https://pradyunsg.me/">Pradyun Gedam</a> and  <a href="derick@maple.up.ac.za">  Derick Swanepoel</a> ☺</p>
+        <footer>
+            <p>Open source code on <a href="https://github.com/punixcorn/no_libc">GitHub</a>.</p>
+        </footer>
+    </body>
+</html>
+<!-- Copyright (C) 2024  Oh Hyun Wo-->
