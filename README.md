@@ -76,10 +76,11 @@ make make_check
 - _printf
 - _scanf
 - _exit
+- _free
 - _malloc
 - _memset
 - _brk
-- sbrk
+- _sbrk
 - _strlen
 - _reverse
 - _itoa
