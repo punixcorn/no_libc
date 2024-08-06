@@ -100,7 +100,8 @@ void _printf(const char *__restrict __fmt, ...) {
         }
     }
     _va_end(ap);
-    _free(__fmt);
+
+    //_free(&__fmt);
 }
 
 char *__readword(char *buf) {
@@ -164,7 +165,7 @@ void _scanf(const char *__restrict __fmt, ...) {
         i++;
     }
     _va_end(ap);
-    _free(input);
+    //_free(input);
 }
 
 int _sprintf(char *__restrict __s, char *__restrict __fmt, ...) {
@@ -220,7 +221,7 @@ int _sprintf(char *__restrict __s, char *__restrict __fmt, ...) {
         }
     }
     _va_end(ap);
-    _free(__fmt);
+    //_free(__fmt);
 
     if (__s == null) return -1;
     return 0;
@@ -291,7 +292,7 @@ char *_format(char *__restrict __fmt, ...) {
         }
     }
     _va_end(ap);
-    _free(__fmt);
+    //_free(__fmt);
     return (s - count);
 };
 
@@ -353,7 +354,7 @@ int _snprintf(char *__restrict __s, size_t __maxlen,
         }
     }
     _va_end(ap);
-    _free(__format);
+    //_free(__format);
 
     if (__s == null) return -1;
     return 0;
@@ -379,5 +380,6 @@ int _getchar(void) {
     return (int)a;
 };
 
-int _sscanf(const char *__restrict __s, const char *__restrict __format, ...){};
-int _fscanf(FILE *__restrict __stream, const char *__restrict __format, ...){};
+int _sscanf(const char *__restrict __s, const char *__restrict __format, ...) {
+};
+int _fscanf(FILE *__restrict __stream, const char *__restrict __format, ...) {};

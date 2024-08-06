@@ -92,7 +92,7 @@
             </div>
         </blockquote>
     -->
-       <h3>PART II : SYSCALLS, SYS_EXIT </h3> 
+       <h2>PART II : SYSCALLS, SYS_EXIT </h2> 
        <p>
         we start off <strong>main.c</strong> in our root directory with a <code> void _start(){} </code></br>
         you can compile it by using: 
@@ -133,7 +133,7 @@
          &emsp;  __asm__ inline(</br>
            &emsp;      "movl $0 ,%%edi;"</br>
            &emsp;       "xorl %%eax, %%eax;"</br>
-           &emsp;       "movl%1, %%eax;"</br>
+           &emsp;       "movl %1, %%eax;"</br>
            &emsp;       "syscall" ::</br>
            &emsp;       "r"(SYSEXIT));</br>
         }
