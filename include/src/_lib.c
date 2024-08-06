@@ -26,9 +26,23 @@ void _start() {
 void* brk();
 void* sbrk();
 
+void _free(void* __ptr) {
+    /* munmap releases pages, but doesn't nullify the pointer */
+    /* passing the pointer by refernce and nullifying after munmap it works */
+    /* just passing the pointer and nullifying it after munmap doesn't work */
+    void* __vp = *(void**)__ptr;
+    /* get size from the original first 4 bytes */
+    size_t __psize = *((char*)(__vp)-4);
+    //_printf("size is %d\n", __psize);
+    void* __ret = _munmap(__vp - 4, __psize);
+    _static_assert(__ret == null, "_munmap Failed");
+    *(void**)__ptr = null;
+}
+
 // malloc using mmap
 [[nodiscard("returns pointer to heap memory")]] void* _malloc(size_t size) {
     void* ptr = null;
+    size += 4; /* extra 4 bytes ( unsigned int ) for size of block */
     __asm__ inline(
         "mov $0, %%r9;"     // offset
         "mov $0, %%r8;"     // file descriptor
@@ -39,8 +53,10 @@ void* sbrk();
         "mov %%rax, %[return_ptr];"
         : [return_ptr] "=rm"(ptr)
         : "S"(size), "a"(SYSMMAP));
-
-    return ptr;
+    *(size_t*)(ptr) = size - 4;
+    /* [size] -> [malloc'ed chunk] */
+    /* | 4B | -> | ...           | */
+    return ptr + 4;
 }
 
 void* _mmap(void* addr, uint64_t length, int64_t prot, int64_t flags,
@@ -56,19 +72,6 @@ void* _mmap(void* addr, uint64_t length, int64_t prot, int64_t flags,
      * rsi = length
      */
 
-    /*
-    __asm__ inline(
-        "mov %1, %%r10;"  // flags
-        "mov $2, %%r8;"   // fd
-        "mov %3,%%r9;"    // offset
-        "syscall;"
-        "mov %%rax, %[return_ptr];"
-        : [return_ptr] "=rm"(ptr)
-        : "D"(addr), "S"(length), "d"(prot), "r"(flags), "r"(fd), "r"(OFFSET),
-          "a"(SYSMMAP));
-    */
-    /* no need to use above, most of the stuff are already place in there for us
-     */
     __asm__ inline(
         "movq %%rcx,%%r10;"
         "syscall;"
@@ -78,22 +81,14 @@ void* _mmap(void* addr, uint64_t length, int64_t prot, int64_t flags,
     return ptr;
 }
 
-int _munmap(void* addr, uint64_t length) {
-    int ret;
+void* _munmap(void* addr, uint64_t length) {
+    void* ret;
     __asm__ inline(
         "syscall;"
-        "movl %%eax,%0;"
-        "movq $0x0,%1;"
-        : "=r"(ret), "=rm"(addr)
+        "movq %%rax, %%rdi;"
+        "movq %%rax, %0"
+        : "=rm"(ret)
         : "a"(SYSMUNMAP));
     return ret;
 };
 
-#ifdef __DEV_
-void _free(void* ptr) {
-    __asm__ inline(
-        "movq $0,%%rbx;"
-        "movq %%rbx,%0"
-        : "=r"(ptr));
-}
-#endif
