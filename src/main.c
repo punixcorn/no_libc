@@ -25,5 +25,8 @@ int main() {
         _println("Memory not freeed");
     }
 
+    int i = 0;
+    _scanf("%d", &i);
+    _printf("%d is i", i);
     return 0;
 }

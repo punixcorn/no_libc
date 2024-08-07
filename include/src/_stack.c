@@ -5,8 +5,6 @@
  * :(.text+0x102): undefined reference to `__stack_chk_fail'
  * collect2: error: ld returned 1 exit status
  */
+#include "../_stack.h"
 
-#ifndef __STACK_CHK_FAIL__
-#define __STACK_CHK_FAIL__
 int __stack_chk_fail(void) { return 0; };
-#endif

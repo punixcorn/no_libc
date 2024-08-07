@@ -9,6 +9,7 @@ void _exit(int exitcode) {
         "movl %1, %%eax;"
         "syscall" ::"r"(exitcode),
         "r"(SYSEXIT));
+    __builtin_unreachable();
 }
 
 /*
@@ -17,7 +18,8 @@ void _exit(int exitcode) {
  * RETURN VALUE FROM MAIN() WILL BE PASSED INTO SYSEXIT()
  */
 void _start() {
-    int main_return = main();
+    /* -127 -> 127, No need to use int , char will do */
+    signed char main_return = main();
     _exit(main_return);
     __builtin_unreachable();
 }
