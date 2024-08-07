@@ -4,6 +4,8 @@ a.out
 peda-session-main.txt
 */**/*.h.gch
 */*.h.gch
-lib/
-static_lib/
+lib/*
+static_lib/*
+build/*
+shared_lib/*
 

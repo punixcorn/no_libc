@@ -1,5 +1,5 @@
 #!/bin/bash
-files=$(ls lib/)
+files=$(/bin/ls lib/)
 
 if [ -z "$files" ];then 
     ./scripts/shared.sh

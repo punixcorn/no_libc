@@ -33,16 +33,15 @@ make run    # run's binary
 ### Run tests 
 
 ```sh
-make make_check
+make test
 ```
 
 ### Targets in Makefile
 
-- `make_check` = compile lib in all formats (**.so**,**.a**,**.c**) for testing 
-- `static` = creats a static lib in `static_lib/` dir and links to `src/main.c` 
-- `static_lib_` = creates static lib `no_libc.a` in `static_lib/` dir
-- `shared` = creates shared objects (**.so**) in `lib/` ( it is the default target )
-- `main` = uses raw c files in `include/src/` and links them to `src/main.c`
+- `test` = compile lib in all formats (**.so**,**.a**,**.c**) for testing 
+- `static_lib` = creates static lib `no_libc.a` in `static_lib/` dir
+- `shared_lib` = creates shared objects (**.so**) in `shared_lib/` ( it is the default target )
+- `all` = uses raw c files in `include/src/` and links them to `src/main.c`
 
 ---
 
@@ -54,14 +53,18 @@ make make_check
 ---
 
 # DIRECTORIES
+## libc source codes 
+- `include/` = header include files 
+- `include/src/` = source include files for the header include files
+- `src/` = source file(s), that's where `main.c` is located ( Program Entry )
 
-- `src/` = source file(s), that's where `main.c` is located
-- `include/` = header files & source files dir, all used for the header files
-- `include/src/` = source files for the header files
-- `iib/` = compiled shared object files ( `.so` files )
-- `scripts/` = scripts to compile shared files and check shared files ( used in makefile )
+## Compiled source codes
+- `shared_iib/` = compiled shared object files ( `.so` files )
 - `static_lib/` = contains `no_libc.a` for static linking
 - `bin` = ouput binary is placed
+
+## others
+- `scripts/` ( no longer in use ) = scripts to compile shared files and check shared files ( used in old makefile )
 
 ---
 
