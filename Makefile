@@ -45,6 +45,11 @@ test:
 	make static_lib
 	@echo -e "\e[32m[+]\e[0m Done."
 
+workflow-test:
+	@echo -e "\e[43m[ TESTING WORKFLOW BUILD \e[0m]"
+	@echo -e "\e[33m[#]\e[0m TESTING : LINKING C FILES" 
+	make all
+
 # uses .c files
 .PHONY: all
 all: $(c_include_source_files) $(c_include_header_files) $(c_source_files) $(c_include_files)
