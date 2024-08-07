@@ -13,12 +13,14 @@ args=
 
 
 # make all so files and build main binary with it
-.PHONY: shared_lib
-shared_lib: $(c_include_source_files) $(c_source_files)  $(c_header_files)
+bootstrap_shared_lib:
 	@mkdir -p build shared_lib 
 	@echo -e "[\e[42m Building so files... \e[0m]"
 	@$(foreach file ,$(c_include_source_files),gcc -shared $(file) -o  $(patsubst include/src/%.c, shared_lib/%.so, $(file)) && ) true
 	@echo -e "\e[32m[+]\e[0m Done."
+
+.PHONY: shared_lib
+shared_lib: bootstrap_shared_lib $(c_include_source_files) $(c_source_files)  $(c_header_files)
 	@echo -e "\e[32m[+]\e[0m Linking File..."
 	gcc ${FLAGS} $(shell find shared_lib/* -name "*.so") include/src/_lib.c ${c_source_files} -o build/main
 	@echo -e "\e[32m[+]\e[0m Done."
