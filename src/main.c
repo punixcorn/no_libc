@@ -3,30 +3,19 @@
 #include "../include/_io.h"
 #include "../include/_lib.h"
 
+struct boost {
+    void (*run)();
+};
+
+void run() {
+    int* a = _malloc(12);
+    *a = 12;
+    *(a + sizeof(int)) = 24;
+    _printf("%d %d\n", *a, *(a + sizeof(int)));
+}
+static struct boost namespace = {.run = run};
+
 int main() {
-    int* a = (int*)_malloc(sizeof(int) * 3);
-    if (a == null) {
-        _println("malloc failed");
-        return -1;
-    }
-
-    for (int i = 0; i < 3; i++) {
-        a[i] = i;
-    }
-
-    for (int i = 0; i < 3; i++) {
-        _printf("a[%d] = %d\n", i, a[i]);
-    }
-
-    _free(&a);
-    if (a == null) {
-        _println("Memory freed");
-    } else {
-        _println("Memory not freeed");
-    }
-
-    int i = 0;
-    _scanf("%d", &i);
-    _printf("%d is i", i);
+    namespace.run();
     return 0;
 }

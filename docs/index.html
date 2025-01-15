@@ -16,15 +16,15 @@
     <body>
         <header>
             <h1>no_libc, a libc from scratch*</h1>
-            <aside> a small version of libc from start using syscalls (on linux) </aside>
+            <aside> a small version of libc from start using syscalls (on gnu x86_64 linux) </aside>
         </header>
         <!-- PURPOSE -->
         <h2><strong>Purpose</strong></h2>
-        <p> Just entriely out of fun and for learning, after all how many times you get to wake up and say to yourself,</br> <em>"I am going to rewite the C standard library"</em></p>
+        <p> Just entirely out of fun and for learning, after all how many times you get to wake up and say to yourself,</br> <em>"I am going to rewite the C standard library"</em></p>
 
-        <p>Writing this was a little fun challange for me, and also an excuse to use assembly ( not AT&T )
+        <p>Writing this was a little fun challenge for me, and also an excuse to use assembly (not AT&T)
             </br>
-            I am going to try my best to demonstrate  what i did so you can get started on your own, or understand what's going on
+            I am going to try my best to demonstrate what I did so you can get started on your own, or understand what's going on.
         </p>
          what you need to get started is a bit of understanding in 
         <ul>
@@ -40,9 +40,9 @@
         <h2>PART I : Assembly</h2>
         <p>The purpose of this Writing isn't a follow through tutorial but to showcase my process.
         </br>
-        This isnt a tutorial if you want one there are probably many online.
+        This isn't a tutorial, and  if you want one there are probably many online.
         </br>
-        I was going to write a bit of tutorial basic Assembly, but found a stunning one by
+        I was going to write a tutorial on basic Assembly, but found a stunning one by
         this kind random internet stranger : </br>
         <a href="https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html">Assembly tutorial</a>.<h6> Check it out before continuing any further </h6>
         </p>
@@ -94,7 +94,10 @@
     -->
        <h2>PART II : SYSCALLS, SYS_EXIT </h2> 
        <p>
-        we start off <strong>main.c</strong> in our root directory with a <code> void _start(){} </code></br>
+        We start off <strong>main.c</strong> in our root directory with a
+       <codeblock style="display: flex; justify-content: center; align-self: center;">
+       <code style="padding: 0px 5px 0px 5px;"> void _start(){}  </code> </br>
+       </codeblock>
         you can compile it by using: 
        </p>
        <codeblock style="display: flex; justify-content: center; align-self: center;">
@@ -107,7 +110,9 @@
        <codeblock style="display: flex; justify-content: center; align-self: center;">
        <code> [1]    153003 segmentation fault (core dumped)  ./main </code>
        </codeblock>
-       <p> A <em> segfault </em>. Why? because the program didn't know where to stop. To tell it where we stop there's a syscall in linux called exit </br>
+       <p> A <em> segfault </em>. Why? because the program didn't know where to stop.<br/>
+       In gcc it starts executing by jumping a <em>_start</em> label in assembly.<br/>
+       To tell it where we stop there's a syscall in linux called exit </br>
         take a look here to see all of syscalls :
        <a href="https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md">chromium syscall docs</a>
         </p>
@@ -126,8 +131,8 @@
         </p>
 
        </p>
-
-        <blockquote style="background-color: #f2f2f2;color: black;">
+        <div style="background-color: white;">
+        <blockquote style="color: black; font-style: italic;">
         #define SYSEXIT  60 </br>
         void _start() { </br>
          &emsp;  __asm__ inline(</br>
@@ -138,7 +143,7 @@
            &emsp;       "r"(SYSEXIT));</br>
         }
         </blockquote>
-
+        </div>
         <p>
             this will make our code exit normally, you can see from here that we placed <strong>0</strong> into <em>edi(rsi)</em> and
             moved <strong> SYSEXIT(60)</strong> into <em>eax(rax)</em> and then we called syscall to carry out the function
